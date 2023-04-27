@@ -1,0 +1,64 @@
+﻿@model IEnumerable<NoteApplication.ViewModels.NoteViewModel>
+
+@{
+    //Layout = "~/Views/Shared/_Layout.cshtml";
+    ViewBag.Title = "Note List";
+}
+<div id="table"></div>
+<div class="d-flex justify-content-end">
+    @*<button type="button" class="btn btn-primary" data-toggle="note-modal" data-target="#addNote" data-url="@Url.Action("Create")">
+        Create
+    </button>*@
+    <button type="button" class="btn btn-primary" data-toggle="note-modal" data-target="#addNote" onclick="addNote()">
+        Create
+    </button>
+</div>
+<div>
+    <table class="table table-striped" >
+        <thead>
+            <tr>
+                <th>Id</th>
+                <th>Title</th>
+                <th>Description</th>
+                <th>Action</th>
+            </tr>
+        </thead>
+        <tbody>
+            @{
+                int i = 1;
+            }
+            @foreach (var note in Model)
+            {
+                <tr>
+                    <td>@i</td>
+                    <td>@note.Title</td>
+                    <td>@note.Description</td>
+                    <td>
+                        <button class="btn btn-primary mx-10" data-toggle="note-modal" data-target="#addNote" data-url="@Url.Action($"Edit/{note.Id}")">
+                            Edit
+                        </button>
+                        <button class="btn btn-primary mx-10" data-toggle="note-modal" data-target="#addNote" data-url="@Url.Action($"Edit/{note.Id}")">
+                            Details
+                        </button>
+                        <button class="btn btn-danger" data-url="@Url.Action($"Delete/{note.Id}")">
+                            Delete
+                        </button>
+                    </td>
+                </tr>
+                i++;
+            }
+        </tbody>
+    </table>
+</div>
+<script>
+    function addNote(){
+        $.ajax({
+            type: 'GET',
+            url: '/Note/Create',
+            success: function (result){
+                $('#table').html(result);
+                $('#addNote').modal('show');
+            }
+        })
+    }
+</script>

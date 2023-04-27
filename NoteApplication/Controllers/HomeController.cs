@@ -8,17 +8,14 @@ namespace NoteApplication.Controllers
     public class HomeController : Controller
     {
         private readonly ILogger<HomeController> _logger;
-        private readonly INoteService _noteService;
 
-        public HomeController(ILogger<HomeController> logger,INoteService noteService)
+        public HomeController(ILogger<HomeController> logger)
         {
             _logger = logger;
-            _noteService = noteService;
         }
 
         public IActionResult Index()
         {
-            var notesList = _noteService.GetNote();
             return View();
         }
 

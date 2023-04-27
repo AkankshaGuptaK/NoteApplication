@@ -11,7 +11,7 @@ namespace NoteApplication.Persistence.Interfaces.Services
     {
         public Note GetNoteById(Guid Id);
         public List<Note> GetNote();
-        public Guid AddNote(Note note);
+        public bool AddNote(Note note);
         public bool UpdateNote(Note note);
         public bool DeleteNote(Guid Id);
     }

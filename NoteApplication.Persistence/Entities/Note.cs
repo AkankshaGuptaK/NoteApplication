@@ -22,6 +22,7 @@ namespace NoteApplication.Persistence.Entities
         public string CreatedBy { get; set; } // CreatedBy (length: 450)
         public bool IsDeleted { get; set; } // IsDeleted
         public int EditCount { get; set; } // EditCount
+        public virtual User User { get; set; }
 
         public Note()
         {

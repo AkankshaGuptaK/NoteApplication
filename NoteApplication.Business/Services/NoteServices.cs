@@ -14,10 +14,10 @@ namespace NoteApplication.Business.Services
         {
             _noteRepository = noteRepository;
         }
-        Guid INoteService.AddNote(Note note)
+        bool INoteService.AddNote(Note note)
         {
             List<String> noteNames = _noteRepository.GetAllNotesName();
-            bool isUniqueName = (noteNames.IndexOf(note.Title)) > -1;
+            bool isUniqueName = (noteNames.IndexOf(note.Title)) == -1;
             if (isUniqueName)
             {
                 return _noteRepository.AddNote(note);
@@ -40,7 +40,7 @@ namespace NoteApplication.Business.Services
 
         Note INoteService.GetNoteById(Guid Id)
         {
-            throw new NotImplementedException();
+            return _noteRepository.GetNoteById(Id);
         }
 
         bool INoteService.UpdateNote(Note note)

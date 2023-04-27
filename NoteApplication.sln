@@ -5,9 +5,9 @@ VisualStudioVersion = 17.5.33530.505
 MinimumVisualStudioVersion = 10.0.40219.1
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApplication", "NoteApplication\NoteApplication.csproj", "{9C728FD2-E181-4680-BF20-65A5CFF22E37}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteApplication.Business", "NoteApplication.Business\NoteApplication.Business.csproj", "{458966F6-2FDC-46A8-98C2-DE0A14EED6C6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApplication.Business", "NoteApplication.Business\NoteApplication.Business.csproj", "{458966F6-2FDC-46A8-98C2-DE0A14EED6C6}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "NoteApplication.Persistence", "NoteApplication.Persistence\NoteApplication.Persistence.csproj", "{FAD807B6-D66E-4BA8-8AE2-2709296571F2}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "NoteApplication.Persistence", "NoteApplication.Persistence\NoteApplication.Persistence.csproj", "{FAD807B6-D66E-4BA8-8AE2-2709296571F2}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

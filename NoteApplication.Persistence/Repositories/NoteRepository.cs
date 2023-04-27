@@ -1,4 +1,5 @@
-﻿using NoteApplication.Persistence.Entities;
+﻿using Microsoft.EntityFrameworkCore;
+using NoteApplication.Persistence.Entities;
 using NoteApplication.Persistence.Interfaces;
 using NoteApplication.Persistence.Interfaces.Context;
 using System;
@@ -18,9 +19,18 @@ namespace NoteApplication.Persistence.Repositories
         }
 
 
-        Guid INoteRepository.AddNote(Note note)
+        bool INoteRepository.AddNote(Note note)
         {
-            return (_context.Notes.Add(note)).Entity.Id;
+            try
+            {
+                _context.Notes.Add(note);
+                _context.SaveChanges();
+                return true;
+            }
+            catch (Exception e)
+            {
+                return false;
+            }
         }
 
         bool INoteRepository.DeleteNote(Guid Id)
@@ -36,12 +46,12 @@ namespace NoteApplication.Persistence.Repositories
         List<Note> INoteRepository.GetNote()
         {
 
-            return _context.Notes.ToList();
+            return _context.Notes.Include( u => u.User).ToList();
         }
 
         Note INoteRepository.GetNoteById(Guid Id)
         {
-            return _context.Notes.Where(x => x.Id == Id)?.FirstOrDefault();
+            return _context.Notes.Include( u => u.User).Where(x => x.Id == Id)?.FirstOrDefault();
         }
 
         bool INoteRepository.UpdateNote(Note note)

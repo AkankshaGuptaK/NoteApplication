@@ -38,9 +38,27 @@ namespace NoteApplication.Persistence.Contexts
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {
+            modelBuilder.Entity<User>(entity =>
+            {
+                entity.ToTable("AspNetUsers");
+                entity.HasKey(_ => _.Id)
+                    .HasName("PK_AspNetUsers");
+                entity.HasMany(_ => _.Notes);
+
+            });
+
+            modelBuilder.Entity<Note>(entity => {
+                
+                entity.HasOne(_ => _.User)
+                .WithMany(_ => _.Notes)
+                .HasForeignKey(_ => _.CreatedBy)
+                .HasConstraintName("Note_User_FK_Relationship");
+            });
+            
             base.OnModelCreating(modelBuilder);
 
             modelBuilder.ApplyConfiguration(new NoteConfiguration());
         }
+
     }
 }
