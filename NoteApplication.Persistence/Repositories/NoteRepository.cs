@@ -35,23 +35,32 @@ namespace NoteApplication.Persistence.Repositories
 
         bool INoteRepository.DeleteNote(Guid Id)
         {
-            return _context.Notes.FirstOrDefault(x => x.Id == Id).IsDeleted;
+            try
+            {
+                _context.Notes.FirstOrDefault(x => x.Id == Id).IsDeleted = true;
+                _context.SaveChanges();
+                return true;
+            }
+            catch(Exception e)
+            {
+                return false;
+            }
         }
 
         List<string> INoteRepository.GetAllNotesName()
         {
-            return _context.Notes.Select(x => x.Title).ToList();
+            return _context.Notes.Select(x => x.Title).AsNoTracking().ToList();
         }
 
-        List<Note> INoteRepository.GetNote()
+        List<Note> INoteRepository.GetAllNotes()
         {
 
-            return _context.Notes.Include( u => u.User).ToList();
+            return _context.Notes.Include( u => u.User).Where(n => !n.IsDeleted).OrderByDescending(n=> n.LastEdited).AsNoTracking().ToList();
         }
 
         Note INoteRepository.GetNoteById(Guid Id)
         {
-            return _context.Notes.Include( u => u.User).Where(x => x.Id == Id)?.FirstOrDefault();
+            return _context.Notes.Include( u => u.User).Where(x => x.Id == Id).AsNoTracking()?.FirstOrDefault();
         }
 
         bool INoteRepository.UpdateNote(Note note)
@@ -59,6 +68,7 @@ namespace NoteApplication.Persistence.Repositories
             try
             {
                 _context.Notes.Update(note);
+                _context.SaveChanges();
                 return true;
             }
             catch (Exception e)
@@ -66,6 +76,15 @@ namespace NoteApplication.Persistence.Repositories
                 return false;
             }
 
+        }
+
+        public Tuple<List<Note>,int, int, int> GetDashboardData()
+        {
+            var noteslist = _context.Notes.AsNoTracking().ToList();
+            int totalCount = noteslist.Count();
+            int editCount = noteslist.Sum(_ => _.EditCount);
+            int deleteCount = noteslist.Where(n => n.IsDeleted).Count();
+            return Tuple.Create(noteslist.Where(n=> !n.IsDeleted).ToList(), totalCount, editCount, deleteCount);
         }
     }
 }

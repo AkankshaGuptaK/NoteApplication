@@ -1,9 +1,23 @@
-﻿@model IEnumerable<NoteApplication.ViewModels.NoteViewModel>
+﻿@model NoteApplication.ViewModels.DashboardViewModel
 
 @{
     //Layout = "~/Views/Shared/_Layout.cshtml";
     ViewBag.Title = "Note List";
 }
+<div class="row">
+    <table class="table table-bordered">
+        <thead>
+            <th>Total Count</th>
+            <th>Edit Count</th>
+            <th>Delete Count</th>
+        </thead>
+        <tbody>
+            <td>@Model.AddCount</td>
+            <td>@Model.EditCount</td>
+            <td>@Model.DeleteCount</td>
+        </tbody>
+    </table>
+</div>
 <div id="table"></div>
 <div class="d-flex justify-content-end">
     @*<button type="button" class="btn btn-primary" data-toggle="note-modal" data-target="#addNote" data-url="@Url.Action("Create")">
@@ -27,20 +41,22 @@
             @{
                 int i = 1;
             }
-            @foreach (var note in Model)
+            @foreach (var note in Model.Notes)
             {
                 <tr>
                     <td>@i</td>
                     <td>@note.Title</td>
                     <td>@note.Description</td>
                     <td>
-                        <button class="btn btn-primary mx-10" data-toggle="note-modal" data-target="#addNote" data-url="@Url.Action($"Edit/{note.Id}")">
+                        <button type="button" class="btn btn-primary mx-10" data-toggle="note-modal" data-target="#addNote" onclick="editNote('@note.Id')">
                             Edit
                         </button>
-                        <button class="btn btn-primary mx-10" data-toggle="note-modal" data-target="#addNote" data-url="@Url.Action($"Edit/{note.Id}")">
+                        <button class="btn btn-primary mx-10" data-toggle="modal" data-target="@("#NoteDetail" + note.Id)" data-url="@Url.Action($"Detail/{note.Id}")" onclick="showDetailModal('@note.Id')">
                             Details
                         </button>
-                        <button class="btn btn-danger" data-url="@Url.Action($"Delete/{note.Id}")">
+                        @await Html.PartialAsync("_NoteDetailPartialView",note)
+
+                        <button type="button" class="btn btn-danger mx-10" data-toggle="note-modal" data-target="#deleteNote" onclick="deleteNote('@note.Id')">
                             Delete
                         </button>
                     </td>
@@ -58,6 +74,43 @@
             success: function (result){
                 $('#table').html(result);
                 $('#addNote').modal('show');
+            }
+        })
+    }
+
+    function showDetailModal(Id){
+        $('#NoteDetail' + Id).modal('show');
+    }
+
+    function detailNote(Id) {
+        $.ajax({
+            type: 'GET',
+            url: '/Note/Detail/'+Id,
+            success: function (result) {
+                $('#table').html(result);
+                $('#NoteDetail'+Id).modal('show');
+            }
+        })
+    }
+
+    function editNote(Id) {
+        $.ajax({
+            type: 'GET',
+            url: '/Note/Edit/'+Id,
+            success: function (result) {
+                $('#table').html(result);
+                $('#editNote').modal('show');
+            }
+        })
+    }
+
+    function deleteNote(Id) {
+        $.ajax({
+            type: 'GET',
+            url: '/Note/Delete/' + Id,
+            success: function (result) {
+                $('#table').html(result);
+                $('#deleteNote').modal('show');
             }
         })
     }

@@ -4,7 +4,7 @@
     ViewData["Title"] = "_NoteDetailPartialView";
 }
 
-<div class="modal fade" id="addNote" tabindex="-1" role="dialog" aria-labelledby="myModalLabel">
+<div class="modal fade" id="@("NoteDetail"+Model.Id)" tabindex="-1" role="dialog" aria-labelledby="myModalLabel" aria-hidden="true">
     <div class="modal-dialog" role="document">
         <div class="modal-content">
             <div class="modal-header">

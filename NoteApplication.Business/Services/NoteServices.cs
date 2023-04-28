@@ -30,12 +30,12 @@ namespace NoteApplication.Business.Services
 
         bool INoteService.DeleteNote(Guid Id)
         {
-            throw new NotImplementedException();
+            return _noteRepository.DeleteNote(Id);
         }
 
-        List<Note> INoteService.GetNote()
+        List<Note> INoteService.GetAllNotes()
         {
-            return _noteRepository.GetNote();
+            return _noteRepository.GetAllNotes();
         }
 
         Note INoteService.GetNoteById(Guid Id)
@@ -43,9 +43,23 @@ namespace NoteApplication.Business.Services
             return _noteRepository.GetNoteById(Id);
         }
 
-        bool INoteService.UpdateNote(Note note)
+        bool INoteService.UpdateNote(Note requestNote)
         {
-            throw new NotImplementedException();
+            List<Note> notes = _noteRepository.GetAllNotes();
+            bool isUniqueName = notes.Where(note => note.Id != requestNote.Id && note.Title == requestNote.Title).Count() == 0;
+            if (isUniqueName)
+            {
+                return _noteRepository.UpdateNote(requestNote);
+            }
+            else
+            {
+                throw new CustomException(400, "Note Name already present");
+            }
+        }
+
+        public Tuple<List<Note>, int, int, int> GetDashboardData()
+        {
+            return _noteRepository.GetDashboardData();
         }
     }
 }
